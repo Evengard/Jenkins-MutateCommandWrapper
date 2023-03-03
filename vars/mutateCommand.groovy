@@ -1,10 +1,16 @@
+import ru.trioptimum.jenkins.mutatecommandwrapper.MutateCommandBuildStepExecution
+import org.jenkinsci.plugins.workflow.steps.StepExecution
+import com.cloudbees.groovy.cps.NonCPS
+
+@NonCPS
+Closure<StepExecution> construct() {
+    return { stepCtx ->
+        new MutateCommandBuildStepExecution(stepCtx)
+    }
+}
+
 def call(Closure body) {
-    //def ctx = new ru.trioptimum.jenkins.mutatecommandwrapper.MutateCommandLauncherDecorator()
-    def step = new ru.trioptimum.jenkins.mutatecommandwrapper.MutateCommandBuildStepWrapper()
-    wrap(step) {
+    wrapStep(construct()) {
         body()
     }
-    /*withContext(ctx) {
-        body()
-    }*/
 }
