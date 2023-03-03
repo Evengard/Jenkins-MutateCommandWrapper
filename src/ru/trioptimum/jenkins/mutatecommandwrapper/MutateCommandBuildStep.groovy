@@ -13,7 +13,8 @@ import edu.umd.cs.findbugs.annotations.NonNull;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import hudson.EnvVars;
 import hudson.Extension;
-import java.io.IOException;
+import java.io.IOException
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -23,10 +24,16 @@ import java.util.Set;
 import net.sf.json.JSONObject;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
+import com.cloudbees.groovy.cps.NonCPS
 
 public class MutateCommandBuildStep extends Step {
     @DataBoundConstructor
     public MutateCommandBuildStep() {
+    }
+
+    @NonCPS
+    public static DescriptorImpl getDescriptorInstance() {
+        return new DescriptorImpl()
     }
 
     @Override
@@ -38,22 +45,12 @@ public class MutateCommandBuildStep extends Step {
 
         private static final long serialVersionUID = 1;
 
-        @SuppressFBWarnings(value = "SE_TRANSIENT_FIELD_NOT_RESTORED", justification = "Only used when starting.")
-        private transient final List<String> overrides;
-
-        Execution(List<String> overrides, StepContext context) {
+        Execution(StepContext context) {
             super(context);
-            this.overrides = overrides;
         }
 
         @Override
         public boolean start() throws Exception {
-            Map<String, String> overridesM = new HashMap<>();
-            for (String pair : overrides) {
-                int split = pair.indexOf('=');
-                assert split != -1;
-                overridesM.put(pair.substring(0, split), pair.substring(split + 1));
-            }
             getContext().newBodyInvoker().
                     withContext(BodyInvoker.mergeLauncherDecorators(getContext().get(LauncherDecorator.class), new MutateCommandLauncherDecorator())).
                     withCallback(BodyExecutionCallback.wrap(getContext())).
@@ -63,30 +60,48 @@ public class MutateCommandBuildStep extends Step {
 
         @Override
         public void onResume() {}
-
     }
 
     @Extension
-    public class DescriptorImpl extends StepDescriptor {
+    public static class DescriptorImpl extends AbstractStepDescriptorImpl {
+        public DescriptorImpl() {
+            super(Execution.class)
+        }
+
+
         @Override
+        @NonCPS
         public String getFunctionName() {
             return "mutateCommandStep";
         }
 
         @NonNull
         @Override
+        @NonCPS
         public String getDisplayName() {
             return "";
         }
 
         @Override
+        @NonCPS
         public boolean takesImplicitBlockArgument() {
             return true;
         }
 
         @Override
+        @NonCPS
         public boolean isAdvanced() {
             return true;
+        }
+
+        @NonCPS
+        public void StepInvoker(org.jenkinsci.plugins.workflow.cps.DSL steps, Object args) {
+            def list = StepDescriptor.all()
+            list.add(this)
+            steps.invokeMethod("mutateCommandStep", args)
+            /*def stepInvoker = steps.class.getDeclaredMethod("invokeStep", org.jenkinsci.plugins.workflow.steps.StepDescriptor.class, Object.class);
+            stepInvoker.setAccessible(true);
+            stepInvoker.invoke(steps, this, args)*/
         }
     }
 }

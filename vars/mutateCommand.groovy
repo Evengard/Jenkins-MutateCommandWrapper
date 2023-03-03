@@ -8,18 +8,27 @@
         body()
     }*/
 //}
+
+import ru.trioptimum.jenkins.mutatecommandwrapper.MutateCommandBuildStep
+
 def call(Object... args) {
     echo this.steps.class.getCanonicalName()
     echo this.class.getCanonicalName()
     echo args.class.getCanonicalName()
-    def descriptor = ru.trioptimum.jenkins.mutatecommandwrapper.MutateCommandBuildStep.DescriptorImpl.class
+    def descriptor = MutateCommandBuildStep.getDescriptorInstance()
+    descriptor.StepInvoker(steps, args)
     def list = org.jenkinsci.plugins.workflow.steps.StepDescriptor.all()
-    list.add(descriptor)
-    steps.invokeMethod("ru.trioptimum.jenkins.mutatecommandwrapper.MutateCommandBuildStep", args)
+    echo "list all descriptor names"
+    list.each {value ->
+        echo value.getFunctionName()
+    }
+    echo "end list all descriptor names"
+    //steps.invokeMethod("ru.trioptimum.jenkins.mutatecommandwrapper.MutateCommandBuildStep", args)
     //def descr = new MutateCommandBuildStep.DescriptorImpl()
     /*def list = StepDescriptor.all()
-    list.add(descriptor.getClass())
-    def stepInvoker = steps.class.getDeclaredMethod("invokeStep", StepDescriptor.class, Object.class);
-    stepInvoker.invoke(steps, descriptor, args)
-    steps.invokeMethod("ru.trioptimum.jenkins.mutatecommandwrapper.MutateCommandBuildStep", args)*/
+    list.add(descriptor.getClass())*/
+    /*def stepInvoker = steps.class.getDeclaredMethod("invokeStep", org.jenkinsci.plugins.workflow.steps.StepDescriptor.class, Object.class);
+    stepInvoker.invoke(steps, descriptor, args)*/
+    //descriptor.StepInvoker(steps, args)
+    //steps.invokeMethod("mutateCommandStep", args)
 }
