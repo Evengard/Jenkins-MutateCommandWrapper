@@ -1,4 +1,4 @@
-def call(Closure body) {
+/*def call(Closure body) {
     //def ctx = new ru.trioptimum.jenkins.mutatecommandwrapper.MutateCommandLauncherDecorator()
     def step = new ru.trioptimum.jenkins.mutatecommandwrapper.MutateCommandBuildStepWrapper()
     wrap(step) {
@@ -7,4 +7,9 @@ def call(Closure body) {
     /*withContext(ctx) {
         body()
     }*/
+//}
+def call(Object... args) {
+    echo this.steps.class.getCanonicalName()
+    echo this.class.getCanonicalName()
+    echo args.class.getCanonicalName()
 }
