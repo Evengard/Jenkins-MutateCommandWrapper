@@ -67,8 +67,9 @@ public class MutateCommandBuildStep extends Step {
     }
 
     @Extension
-    public static class DescriptorImpl extends AbstractStepDescriptorImpl {
-        @Override public String getFunctionName() {
+    public class DescriptorImpl extends StepDescriptor {
+        @Override
+        public String getFunctionName() {
             return "mutateCommandStep";
         }
 

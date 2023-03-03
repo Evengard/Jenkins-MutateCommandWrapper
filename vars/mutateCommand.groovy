@@ -16,4 +16,10 @@ def call(Object... args) {
     def list = org.jenkinsci.plugins.workflow.steps.StepDescriptor.all()
     list.add(descriptor)
     steps.invokeMethod("ru.trioptimum.jenkins.mutatecommandwrapper.MutateCommandBuildStep", args)
+    //def descr = new MutateCommandBuildStep.DescriptorImpl()
+    /*def list = StepDescriptor.all()
+    list.add(descriptor.getClass())
+    def stepInvoker = steps.class.getDeclaredMethod("invokeStep", StepDescriptor.class, Object.class);
+    stepInvoker.invoke(steps, descriptor, args)
+    steps.invokeMethod("ru.trioptimum.jenkins.mutatecommandwrapper.MutateCommandBuildStep", args)*/
 }
