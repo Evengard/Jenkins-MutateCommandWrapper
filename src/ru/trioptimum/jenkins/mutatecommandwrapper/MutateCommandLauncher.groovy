@@ -23,7 +23,7 @@ public class MutateCommandLauncher extends Launcher.DecoratedLauncher {
     @Override
     public Proc launch(ProcStarter starter) throws IOException {
 
-        List<String> args = [ '/srv/tools/tini', "-s", "--" ]
+        List<String> args = [ '/srv/tools/tini', "-s", "-g", "--" ]
         starter.cmds().addAll(0, args)
         return super.launch(starter)
     }
