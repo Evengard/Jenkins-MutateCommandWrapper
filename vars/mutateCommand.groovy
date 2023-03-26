@@ -3,14 +3,14 @@ import org.jenkinsci.plugins.workflow.steps.StepExecution
 import com.cloudbees.groovy.cps.NonCPS
 
 @NonCPS
-Closure<StepExecution> construct() {
+Closure<StepExecution> construct(Map params=[:]) {
     return { stepCtx ->
-        new MutateCommandBuildStepExecution(stepCtx)
+        new MutateCommandBuildStepExecution(stepCtx, params)
     }
 }
 
-def call(Closure body) {
-    wrapStep(construct()) {
+def call(Map params=[:], Closure body) {
+    wrapStep(construct(params)) {
         body()
     }
 }

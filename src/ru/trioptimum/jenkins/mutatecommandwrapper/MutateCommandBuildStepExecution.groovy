@@ -8,8 +8,11 @@ import org.jenkinsci.plugins.workflow.steps.BodyInvoker
 import org.jenkinsci.plugins.workflow.steps.StepContext
 
 public class MutateCommandBuildStepExecution extends AbstractStepExecutionImpl {
-    MutateCommandBuildStepExecution(StepContext context) {
+    private Map params;
+
+    MutateCommandBuildStepExecution(StepContext context, Map params) {
         super(context);
+        this.params = params;
     }
 
     @Override

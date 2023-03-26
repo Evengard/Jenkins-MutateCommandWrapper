@@ -7,10 +7,12 @@ import hudson.Proc
 
 public class MutateCommandLauncher extends Launcher.DecoratedLauncher {
     private Launcher outer;
+    private Map params;
 
-    MutateCommandLauncher(Launcher launcher) {
+    MutateCommandLauncher(Launcher launcher, Map params) {
         super(launcher)
         outer = launcher
+        this.params = params
     }
 
     @NonCPS
@@ -22,9 +24,15 @@ public class MutateCommandLauncher extends Launcher.DecoratedLauncher {
     @NonCPS
     @Override
     public Proc launch(ProcStarter starter) throws IOException {
-
-        List<String> args = [ '/srv/tools/tini', "-s", "-g", "--" ]
-        starter.cmds().addAll(0, args)
+        if (params.containsKey("prefix"))  {
+            starter.cmds().addAll(0, params["prefix"])
+        }
+        if (params.containsKey("postfix")) {
+            starter.cmds().addAll(params["postfix"])
+        }
+        if (params.containsKey("remove")) {
+            starter.cmds().removeIf {it -> params["remove"].contains(it)}
+        }
         return super.launch(starter)
     }
 }
