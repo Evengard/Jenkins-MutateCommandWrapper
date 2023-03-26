@@ -7,9 +7,9 @@ import hudson.Proc
 
 public class MutateCommandLauncher extends Launcher.DecoratedLauncher {
     private Launcher outer;
-    private Map params;
+    private Map<String, List<String>> params;
 
-    MutateCommandLauncher(Launcher launcher, Map params) {
+    MutateCommandLauncher(Launcher launcher, Map<String, List<String>> params) {
         super(launcher)
         outer = launcher
         this.params = params

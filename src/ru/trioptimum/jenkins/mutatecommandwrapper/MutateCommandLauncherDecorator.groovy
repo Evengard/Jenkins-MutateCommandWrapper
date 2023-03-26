@@ -6,9 +6,9 @@ import hudson.LauncherDecorator
 import hudson.model.Node
 
 public class MutateCommandLauncherDecorator extends LauncherDecorator {
-    private Map params;
+    private Map<String, List<String>> params;
 
-    public MutateCommandLauncherDecorator(Map params) {
+    public MutateCommandLauncherDecorator(Map<String, List<String>> params) {
         this.params = params;
     }
 
